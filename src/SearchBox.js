@@ -1,15 +1,15 @@
 import React from 'react'
 
 
-const SearchBox = () => {
+const SearchBox = ({ searchfield, searchChange }) => {
     return (
-        <div className='tc'>
+        <div className='pa2'>
             <input
                 className='pa3 ba b--green bg-lightest-blue'
                 type='serach'
-                placeholder='search robots'>
-            </input>
-
+                placeholder='search robots'
+                onChange={searchChange}
+            />
         </div>
     )
 }
