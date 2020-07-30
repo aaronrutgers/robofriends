@@ -11,7 +11,7 @@ import { searchRobots } from "../reducers";
 
 const mapStateToProps = state => {
     return {
-        searchField: searchRobots(state.searchField)
+        searchField: state.searchRobots.searchField
     }
 }
 
@@ -26,7 +26,8 @@ class App extends Component {
         super()
         this.state = {
             robots: [],
-            searchfield: ''
+            // 有了redux就不需要状态了
+            // searchfield: ''
         }
     }
 
@@ -40,21 +41,23 @@ class App extends Component {
             })
     }
 
-    onSearchChange = (event) => {
-        this.setState({ searchfield: event.target.value })
-    }
+    // 有了redux就不需要了
+    // onSearchChange = (event) => {
+    //     this.setState({ searchfield: event.target.value })
+    // }
 
     render() {
-        const { robots, searchfield } = this.state
+        const { robots } = this.state
+        const { searchField, onSearchChange } = this.props
         const filteredRobots = robots.filter(robot => {
-            return robot.name.toLowerCase().includes(searchfield.toLowerCase())
+            return robot.name.toLowerCase().includes(searchField.toLowerCase())
         })
 
         return !robots.length ?
             <h1>Loading</h1> :
             <div className='tc'>
                 <h1 className="f1">RobotFriends</h1>
-                <SearchBox searchChange={this.onSearchChange} />
+                <SearchBox searchChange={onSearchChange} />
                 <Scroll>
                     <ErrorBoundry>
                         <CardList robots={filteredRobots} />
