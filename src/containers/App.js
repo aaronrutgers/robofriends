@@ -5,40 +5,39 @@ import SearchBox from '../components/SearchBox'
 import Scroll from '../components/Scroll'
 import ErrorBoundry from '../components/ErrorBoundry'
 import './App.css'
-import { setSearchFeild } from "../actions";
-import { searchRobots } from "../reducers";
+import { setSearchFeild, requestRobots } from "../actions";
 
 
 const mapStateToProps = state => {
     return {
-        searchField: state.searchRobots.searchField
+        searchField: state.searchRobots.searchField,
+        robots: state.requestRobots.robots,
+        isPending: state.requestRobots.isPending,
+        error: state.requestRobots.error
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onSearchChange: (event) => dispatch(setSearchFeild(event.target.value))
+        onSearchChange: (event) => dispatch(setSearchFeild(event.target.value)),
+        onRequestRobots: () => dispatch(requestRobots())
     }
 }
 
 class App extends Component {
-    constructor() {
-        super()
-        this.state = {
-            robots: [],
-            // 有了redux就不需要状态了
-            // searchfield: ''
-        }
-    }
+
+    // 有了redux就不需要了
+    // constructor() {
+    //     super()
+    //     this.state = {
+    //         robots: [],
+    //         // 有了redux就不需要状态了
+    //         // searchfield: ''
+    //     }
+    // }
 
     componentDidMount() {
-        fetch('https://jsonplaceholder.typicode.com/users')
-            .then(response => {
-                return response.json()
-            })
-            .then(users => {
-                this.setState({ robots: users })
-            })
+        this.props.onRequestRobots()
     }
 
     // 有了redux就不需要了
@@ -47,13 +46,15 @@ class App extends Component {
     // }
 
     render() {
-        const { robots } = this.state
-        const { searchField, onSearchChange } = this.props
+        // 有了redux就不需要了
+        // const { robots } = this.state
+
+        const { robots, searchField, onSearchChange, isPending } = this.props
         const filteredRobots = robots.filter(robot => {
             return robot.name.toLowerCase().includes(searchField.toLowerCase())
         })
 
-        return !robots.length ?
+        return isPending ?
             <h1>Loading</h1> :
             <div className='tc'>
                 <h1 className="f1">RobotFriends</h1>
